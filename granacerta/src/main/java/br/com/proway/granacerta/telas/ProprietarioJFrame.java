@@ -33,6 +33,17 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
         jTextFieldSobrenome = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabelNumero1 = new javax.swing.JLabel();
+        jTextFieldNumero1 = new javax.swing.JTextField();
+        jLabelOperacao = new javax.swing.JLabel();
+        jComboBoxOperacao = new javax.swing.JComboBox<>();
+        jLabelNumero2 = new javax.swing.JLabel();
+        jTextFieldNumero2 = new javax.swing.JTextField();
+        jButtonCalcular = new javax.swing.JButton();
+        jButtonLimpar = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +57,38 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
         jLabel1.setText("Nome");
 
         jLabel2.setText("Sobrenome");
+
+        jLabelNumero1.setText("Número 1");
+
+        jLabelOperacao.setText("Operação");
+
+        jComboBoxOperacao.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Adição", "Subtração", "Multiplicação", "Divisão", "Menor", "Maior" }));
+        jComboBoxOperacao.setSelectedIndex(-1);
+
+        jLabelNumero2.setText("Número 2");
+
+        jButtonCalcular.setText("Calcular");
+        jButtonCalcular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCalcularActionPerformed(evt);
+            }
+        });
+
+        jButtonLimpar.setText("Limpar");
+
+        jButton1.setText("Botão Opções");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Botão Confirmação");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,11 +104,44 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextFieldSobrenome, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(27, 27, 27))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jSeparator1)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabelNumero2, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(113, 113, 113)
+                                .addComponent(jLabelOperacao, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextFieldNumero2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                            .addComponent(jTextFieldNumero1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxOperacao, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButtonLimpar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonCalcular)))))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -80,7 +156,28 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
                     .addComponent(jTextFieldSobrenome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonApresentar)
-                .addContainerGap(204, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelNumero1)
+                    .addComponent(jLabelOperacao))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNumero1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxOperacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelNumero2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldNumero2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonCalcular)
+                    .addComponent(jButtonLimpar))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2))
+                .addContainerGap())
         );
 
         pack();
@@ -91,14 +188,118 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
         // set para definir
         // Pegar o nome que o usuário preencheu no jTextField
         String nome = jTextFieldNome.getText();
-        
+
         String sobrenome = jTextFieldSobrenome.getText();
-        
+
         JOptionPane.showMessageDialog(null, "Hello World: " + nome + " " + sobrenome);
     }//GEN-LAST:event_jButtonApresentarActionPerformed
 
+    private void jButtonCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCalcularActionPerformed
+
+        // Integer.parseInt é utilizado para converter de String para int
+        // É necessário pois interações com usuário sempre vem como String
+        // Para podermos fazer a operação necesssitamos converter de texto(String) para int
+        // Pegar o número que o usuário digitou no campo Número 1 e convertemos para inteiro
+        int numero1 = Integer.parseInt(jTextFieldNumero1.getText());
+
+        // Pegar o número que o usuário digitou no campo Número 1 e convertemos para inteiro
+        int numero2 = Integer.parseInt(jTextFieldNumero2.getText());
+
+        // String + int + int
+        // String + int => String // "Soma: " + 20 => "Soma: 20"
+        // String + int => String // "Soma: 20" + 4 => "Soma: 204"
+        // String + (int + int) => String + (int) => String
+        // Pegar a operação que o usuário escolheu
+        String operacaoEscolhida = jComboBoxOperacao.getSelectedItem().toString();
+
+        if (operacaoEscolhida.equals("Adição")) {
+            JOptionPane.showMessageDialog(null, "Soma: " + (numero1 + numero2));
+        } else if(operacaoEscolhida.equals("Subtração")){
+            JOptionPane.showMessageDialog(null, "Subtração: " + (numero1 - numero2));
+        } else if(operacaoEscolhida.equals("Multiplicação")){
+            JOptionPane.showMessageDialog(null, "Multiplicação: " + (numero1 * numero2));
+        } else if(operacaoEscolhida.equals("Divisão")){
+            JOptionPane.showMessageDialog(null, "Divisão: " + ((float)numero1 / numero2));
+        } else if(operacaoEscolhida.equals("Menor")){
+            
+            if(numero1 < numero2){
+                JOptionPane.showMessageDialog(this, "Número 1 é menor");
+            }else if(numero2 < numero1){
+                JOptionPane.showMessageDialog(this, "Número 2 é menor");
+            }else{
+                JOptionPane.showMessageDialog(this, "Número 1 é igual ao Número 2");
+            }
+        }
+        
+        // GitHub Pages front-end
+        
+        // Back-end Hostinger, domínio
+        
+        
+        // Desktop Java Swing + Banco de Dados MySQL
+        
+        // Web 
+        // Front-end [html, css, js] (não tem conexão com back-end (não tem banco de dados))
+        // Paga por hospegadem ou GitHub Pages
+        
+        // Front-end [html, css, js]
+        // Back-end [java,c#,python,php,kotlin,go] + Banco de Dados[MySQL,Oracle,PostgreSQL]
+        // Pagar por hospedagem [Hostinger,...] + Compra domínio [https://registro.br/, godaddy
+        
+        // Comentário inline
+        // Comentário in block
+        /*
+            Ex.1: Calcular o ano de nascimento do paciente
+            JTextField para nome do Paciente
+            JTextField idade para idade do Paciente (int)
+            JButton "Calcular Ano Nascimento", ao clicar no botão pegar os dados dos campos e calcular o ano de nascimento
+            Apresentar a mensagem no seguinte formato: "<Nome do Paciente aqui> nasceu no ano de <ano nascimento aqui>"
+            
+            Ex.2: Adicionar os campos de peso e altura
+            JTextField para peso (double)
+            JTextField para altura (double)
+            JButton "Calcular IMC", ao clicar no botão pegar os dados dos campos (Lembrar de converter para Double)
+        
+            Fórmula do IMC peso / altura²
+            Apresentar a mensagem no seguinte formato: "O <Nome do Paciente aqui> tem o IMC: <imc aqui>"
+        
+        Exemplo de conversão para double: double salario = Double.parseDouble(jTextFieldSalario.getText())
+        
+        */        
+        
+        
+    }//GEN-LAST:event_jButtonCalcularActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Botão Opções
+        String[] opcoes = new String[]{
+            "Atacar", "Defender", "Outro"
+        };
+        
+        int indiceOpcaoEscolhida = JOptionPane.showOptionDialog(
+                null, 
+                "Escolha a opção", 
+                "Título da Janela", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null, opcoes, "Outro");
+        
+        System.out.println("Indice: " + indiceOpcaoEscolhida);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Botão Confirmação
+        int opcaoEscolhida = JOptionPane.showConfirmDialog(
+                null, "Deseja continuar?", "Título da Janela", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        System.out.println("Opção escolhida: " + opcaoEscolhida);
+        if (opcaoEscolhida == JOptionPane.YES_OPTION){
+            JOptionPane.showMessageDialog(null, "Escolheu sim");
+        }else if(opcaoEscolhida == JOptionPane.NO_OPTION){
+            JOptionPane.showMessageDialog(null, "Escolheu não");
+        }else{
+            JOptionPane.showMessageDialog(null, "Escolheu fechar o dialog");
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Ex. 1: Criar os campos nome produto, categoria e apresentar para o usuário
-    
     /**
      * @param args the command line arguments
      */
@@ -135,10 +336,21 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonApresentar;
+    private javax.swing.JButton jButtonCalcular;
+    private javax.swing.JButton jButtonLimpar;
+    private javax.swing.JComboBox<String> jComboBoxOperacao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabelNumero1;
+    private javax.swing.JLabel jLabelNumero2;
+    private javax.swing.JLabel jLabelOperacao;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTextFieldNome;
+    private javax.swing.JTextField jTextFieldNumero1;
+    private javax.swing.JTextField jTextFieldNumero2;
     private javax.swing.JTextField jTextFieldSobrenome;
     // End of variables declaration//GEN-END:variables
 }
