@@ -10,12 +10,12 @@ import javax.swing.JOptionPane;
  *
  * @author francisco.sens
  */
-public class ProprietarioJFrame extends javax.swing.JFrame {
+public class ExemploComponentesJFrame extends javax.swing.JFrame {
 
     /**
      * Creates new form ProprietarioJFrame
      */
-    public ProprietarioJFrame() {
+    public ExemploComponentesJFrame() {
         initComponents();
     }
 
@@ -317,20 +317,21 @@ public class ProprietarioJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ProprietarioJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploComponentesJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ProprietarioJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploComponentesJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ProprietarioJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploComponentesJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ProprietarioJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ExemploComponentesJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ProprietarioJFrame().setVisible(true);
+                new ExemploComponentesJFrame().setVisible(true);
             }
         });
     }
