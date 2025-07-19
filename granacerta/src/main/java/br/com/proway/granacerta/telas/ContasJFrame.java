@@ -4,17 +4,36 @@
  */
 package br.com.proway.granacerta.telas;
 
+import br.com.proway.granacerta.bancodados.BancoDadosUtil;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author francisco.sens
  */
 public class ContasJFrame extends javax.swing.JFrame {
 
+    private final DefaultTableModel modeloTabela;
+    private int idEditar;
+
     /**
-     * Creates new form ContasJFrame
+     * Construtor é chamado quando ocorre um new da classe, exemplo: new
+     * ContasJFrame();
      */
     public ContasJFrame() {
         initComponents();
+
+        // Pegar o modelo do jtable das contas fazendo um 
+        // cast para DefaultTableModel
+        modeloTabela = (DefaultTableModel) jTableContas.getModel();
+        // idEditar começa com -1 pq é o modo de cadastro
+        idEditar = -1;
+        consultarContas();
     }
 
     /**
@@ -96,10 +115,25 @@ public class ContasJFrame extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextAreaDescricao);
 
         jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
 
         jButtonApagar.setText("Apagar");
+        jButtonApagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonApagarActionPerformed(evt);
+            }
+        });
 
         jButtonEditar.setText("Editar");
+        jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
 
@@ -108,67 +142,66 @@ public class ContasJFrame extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jTextFieldNome)
-                        .addComponent(jLabelTipo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                            .addComponent(jRadioButtonTipoCorrente, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jRadioButtonTipoPoupanca, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabelSlado, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 311, Short.MAX_VALUE)
-                        .addComponent(jFormattedTextFieldSaldo, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButtonCancelar)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButtonSalvar))
-                        .addComponent(jLabelDescrico, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                    .addComponent(jLabelNome, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jRadioButtonTipoCorrente, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jRadioButtonTipoPoupanca, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelSlado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFormattedTextFieldSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelDescrico, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(157, 157, 157)
+                        .addComponent(jButtonCancelar)
+                        .addGap(6, 6, 6)
+                        .addComponent(jButtonSalvar)))
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(360, 360, 360)
                         .addComponent(jButtonEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jButtonApagar))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 510, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabelNome)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jTextFieldNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jLabelTipo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jRadioButtonTipoCorrente)
                             .addComponent(jRadioButtonTipoPoupanca))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jLabelSlado)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jFormattedTextFieldSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
                         .addComponent(jLabelDescrico)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonSalvar)
-                            .addComponent(jButtonCancelar)))
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonCancelar)
+                            .addComponent(jButtonSalvar)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButtonApagar)
-                            .addComponent(jButtonEditar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(14, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonEditar)
+                            .addComponent(jButtonApagar))
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         pack();
@@ -179,6 +212,122 @@ public class ContasJFrame extends javax.swing.JFrame {
         var home = new HomeJFrame();
         home.setVisible(true);
     }//GEN-LAST:event_formWindowClosed
+
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        String nome = jTextFieldNome.getText();
+        double saldo = Double.parseDouble(jFormattedTextFieldSaldo.getText().replace(",", "."));
+        String descricao = jTextAreaDescricao.getText();
+        int tipoSelecionado;
+        if (jRadioButtonTipoPoupanca.isSelected()) {
+            tipoSelecionado = 0;
+        } else {
+            tipoSelecionado = 1;
+        }
+
+        // Comando que será executado no nosso banco de dados
+        String sql = "INSERT INTO contas (nome, tipo, saldo, descricao) VALUES (?,?,?,?)";
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
+            preparadorDeSQL.setString(1, nome);
+            preparadorDeSQL.setInt(2, tipoSelecionado);
+            preparadorDeSQL.setDouble(3, saldo);
+            preparadorDeSQL.setString(4, descricao);
+            preparadorDeSQL.execute();
+            JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso");
+            limparCampos();
+            consultarContas();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível cadastrar a conta");
+            e.printStackTrace();
+        }
+//import br.com.proway.granacerta.bancodados.BancoDadosUtil;
+
+        // Como utilizar banco de dados na minha aplicação JAVA?
+        // Adicionar dependencia do mysql-connector-j no pom.xml utilizando maven
+        // Executar com F6 que fará o download das dependencias 
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
+
+    private void jButtonApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApagarActionPerformed
+        // Comando que será executado no nosso banco de dados
+        String sql = "DELETE FROM contas WHERE id = ?";
+        
+        int indiceLinhaSelecionada = jTableContas.getSelectedRow();
+        idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
+        
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
+            preparadorDeSQL.setInt(1, idEditar);
+            preparadorDeSQL.execute();
+            JOptionPane.showMessageDialog(null, "Conta apagada com sucesso");
+            consultarContas();
+            idEditar = -1;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível apagar a conta");
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButtonApagarActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        // Comando que será executado no nosso banco de dados
+        String sql = "SELECT nome, saldo, tipo, descricao FROM contas WHERE id = ?";
+        
+        int indiceLinhaSelecionada = jTableContas.getSelectedRow();
+        idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
+        
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
+            preparadorDeSQL.setInt(1, idEditar);
+            preparadorDeSQL.execute();
+            ResultSet registros = preparadorDeSQL.getResultSet();
+            if(registros.next()){
+                String nome = registros.getString("nome");
+                double saldo = registros.getDouble("saldo");
+                int tipo = registros.getInt("tipo");
+                String descricao = registros.getString("descricao");
+                jTextFieldNome.setText(nome);
+                jFormattedTextFieldSaldo.setText(String.valueOf(saldo).replace(".", ","));
+                jTextAreaDescricao.setText(descricao);
+                if(tipo == 0){
+                    jRadioButtonTipoPoupanca.setSelected(true);
+                }else{
+                    jRadioButtonTipoCorrente.setSelected(true);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível consultar a conta");
+            e.printStackTrace();
+        } // Desenvolvimento da criação, listagem e exclusão de contas
+    }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    // Método sem retorno
+    private void limparCampos() {
+        jTextFieldNome.setText("");
+        jTextAreaDescricao.setText("");
+        buttonGroupTipo.clearSelection();
+        jFormattedTextFieldSaldo.setText("");
+    }
+
+    private void consultarContas() {
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            String sql = "SELECT id, nome, saldo, tipo, descricao FROM contas;";
+            Statement executorSql = conexao.createStatement();
+            executorSql.execute(sql);
+            ResultSet registros = executorSql.getResultSet();
+            modeloTabela.setRowCount(0);
+            
+            while (registros.next()) {
+                int id = registros.getInt("id");
+                String nome = registros.getString("nome");
+                double saldo = registros.getDouble("saldo");
+                int tipo = registros.getInt("tipo");
+                modeloTabela.addRow(new Object[]{id, nome, tipo, saldo});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Não foi possível consultar as contas");
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
