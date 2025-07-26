@@ -223,7 +223,106 @@ public class ContasJFrame extends javax.swing.JFrame {
         } else {
             tipoSelecionado = 1;
         }
+        
+        if (idEditar == -1){        
+            cadastrarConta(nome, tipoSelecionado, saldo, descricao);
+        }else{
+            editarConta(nome, tipoSelecionado, saldo, descricao);
+        }
+        
+        
+//import br.com.proway.granacerta.bancodados.BancoDadosUtil;
 
+        // Como utilizar banco de dados na minha aplicação JAVA?
+        // Adicionar dependencia do mysql-connector-j no pom.xml utilizando maven
+        // Executar com F6 que fará o download das dependencias 
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
+
+    private void jButtonApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApagarActionPerformed
+        // Comando que será executado no nosso banco de dados
+        String sql = "DELETE FROM contas WHERE id = ?";
+
+        int indiceLinhaSelecionada = jTableContas.getSelectedRow();
+        idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
+
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
+            preparadorDeSQL.setInt(1, idEditar);
+            preparadorDeSQL.execute();
+            JOptionPane.showMessageDialog(null, "Conta apagada com sucesso");
+            consultarContas();
+            idEditar = -1;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível apagar a conta");
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButtonApagarActionPerformed
+
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        // Comando que será executado no nosso banco de dados
+        String sql = "SELECT nome, saldo, tipo, descricao FROM contas WHERE id = ?";
+
+        int indiceLinhaSelecionada = jTableContas.getSelectedRow();
+        idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
+
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
+            preparadorDeSQL.setInt(1, idEditar);
+            preparadorDeSQL.execute();
+            ResultSet registros = preparadorDeSQL.getResultSet();
+            if (registros.next()) {
+                String nome = registros.getString("nome");
+                double saldo = registros.getDouble("saldo");
+                int tipo = registros.getInt("tipo");
+                String descricao = registros.getString("descricao");
+                jTextFieldNome.setText(nome);
+                jFormattedTextFieldSaldo.setText(String.valueOf(saldo).replace(".", ","));
+                jTextAreaDescricao.setText(descricao);
+                if (tipo == 0) {
+                    jRadioButtonTipoPoupanca.setSelected(true);
+                } else {
+                    jRadioButtonTipoCorrente.setSelected(true);
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível consultar a conta");
+            e.printStackTrace();
+        } // Desenvolvimento da criação, listagem e exclusão de contas
+    }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    // Método sem retorno
+    private void limparCampos() {
+        jTextFieldNome.setText("");
+        jTextAreaDescricao.setText("");
+        buttonGroupTipo.clearSelection();
+        jFormattedTextFieldSaldo.setText("");
+        idEditar = -1;
+    }
+
+    private void consultarContas() {
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            String sql = "SELECT id, nome, saldo, tipo, descricao FROM contas;";
+            Statement executorSql = conexao.createStatement();
+            executorSql.execute(sql);
+            ResultSet registros = executorSql.getResultSet();
+            modeloTabela.setRowCount(0);
+
+            while (registros.next()) {
+                int id = registros.getInt("id");
+                String nome = registros.getString("nome");
+                double saldo = registros.getDouble("saldo");
+                int tipo = registros.getInt("tipo");
+                modeloTabela.addRow(new Object[]{id, nome, tipo, saldo});
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Não foi possível consultar as contas");
+        }
+    }
+
+    private void cadastrarConta(
+            String nome, int tipoSelecionado, double saldo, String descricao
+    ) {
         // Comando que será executado no nosso banco de dados
         String sql = "INSERT INTO contas (nome, tipo, saldo, descricao) VALUES (?,?,?,?)";
         try (Connection conexao = BancoDadosUtil.getConnection()) {
@@ -241,91 +340,24 @@ public class ContasJFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Não foi possível cadastrar a conta");
             e.printStackTrace();
         }
-//import br.com.proway.granacerta.bancodados.BancoDadosUtil;
-
-        // Como utilizar banco de dados na minha aplicação JAVA?
-        // Adicionar dependencia do mysql-connector-j no pom.xml utilizando maven
-        // Executar com F6 que fará o download das dependencias 
-    }//GEN-LAST:event_jButtonSalvarActionPerformed
-
-    private void jButtonApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApagarActionPerformed
-        // Comando que será executado no nosso banco de dados
-        String sql = "DELETE FROM contas WHERE id = ?";
-        
-        int indiceLinhaSelecionada = jTableContas.getSelectedRow();
-        idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
-        
-        try (Connection conexao = BancoDadosUtil.getConnection()) {
-            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
-            preparadorDeSQL.setInt(1, idEditar);
-            preparadorDeSQL.execute();
-            JOptionPane.showMessageDialog(null, "Conta apagada com sucesso");
-            consultarContas();
-            idEditar = -1;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Não foi possível apagar a conta");
-            e.printStackTrace();
-        }
-    }//GEN-LAST:event_jButtonApagarActionPerformed
-
-    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // Comando que será executado no nosso banco de dados
-        String sql = "SELECT nome, saldo, tipo, descricao FROM contas WHERE id = ?";
-        
-        int indiceLinhaSelecionada = jTableContas.getSelectedRow();
-        idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
-        
-        try (Connection conexao = BancoDadosUtil.getConnection()) {
-            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
-            preparadorDeSQL.setInt(1, idEditar);
-            preparadorDeSQL.execute();
-            ResultSet registros = preparadorDeSQL.getResultSet();
-            if(registros.next()){
-                String nome = registros.getString("nome");
-                double saldo = registros.getDouble("saldo");
-                int tipo = registros.getInt("tipo");
-                String descricao = registros.getString("descricao");
-                jTextFieldNome.setText(nome);
-                jFormattedTextFieldSaldo.setText(String.valueOf(saldo).replace(".", ","));
-                jTextAreaDescricao.setText(descricao);
-                if(tipo == 0){
-                    jRadioButtonTipoPoupanca.setSelected(true);
-                }else{
-                    jRadioButtonTipoCorrente.setSelected(true);
-                }
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Não foi possível consultar a conta");
-            e.printStackTrace();
-        } // Desenvolvimento da criação, listagem e exclusão de contas
-    }//GEN-LAST:event_jButtonEditarActionPerformed
-
-    // Método sem retorno
-    private void limparCampos() {
-        jTextFieldNome.setText("");
-        jTextAreaDescricao.setText("");
-        buttonGroupTipo.clearSelection();
-        jFormattedTextFieldSaldo.setText("");
     }
-
-    private void consultarContas() {
-        try (Connection conexao = BancoDadosUtil.getConnection()) {
-            String sql = "SELECT id, nome, saldo, tipo, descricao FROM contas;";
-            Statement executorSql = conexao.createStatement();
-            executorSql.execute(sql);
-            ResultSet registros = executorSql.getResultSet();
-            modeloTabela.setRowCount(0);
-            
-            while (registros.next()) {
-                int id = registros.getInt("id");
-                String nome = registros.getString("nome");
-                double saldo = registros.getDouble("saldo");
-                int tipo = registros.getInt("tipo");
-                modeloTabela.addRow(new Object[]{id, nome, tipo, saldo});
-            }
-        } catch (Exception e) {
+    
+    private void editarConta(String nome, int tipoSelecionado,double saldo, String descricao){
+        String sql = "UPDATE contas SET nome = ?, tipo = ?, saldo = ?, descricao = ? WHERE id = ?";
+        try (Connection conexao = BancoDadosUtil.getConnection()){
+            PreparedStatement preparadorSQL = conexao.prepareStatement(sql);
+            preparadorSQL.setString(1, nome);
+            preparadorSQL.setInt(2, tipoSelecionado);
+            preparadorSQL.setDouble(3, saldo);
+            preparadorSQL.setString(4, descricao);
+            preparadorSQL.setInt(5, idEditar);
+            preparadorSQL.execute();
+            limparCampos();
+            consultarContas();
+            JOptionPane.showMessageDialog(null, "Conta alterada com sucesso");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Não foi possível alterar a conta");
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Não foi possível consultar as contas");
         }
     }
 

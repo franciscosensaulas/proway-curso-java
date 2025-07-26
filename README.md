@@ -5,6 +5,12 @@ Proprietario
     email
     senha
 
+Cliente
+    id
+    nome
+    cnpj
+    
+
 Conta
     id
     tipo [Pounpança, Corrente] (ENUM)
