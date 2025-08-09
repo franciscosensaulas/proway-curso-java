@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -226,7 +227,7 @@ public class ContasJFrame extends javax.swing.JFrame {
         } else {
             tipoSelecionado = 1;
         }
-        
+
         Conta conta = new Conta();
         conta.setNome(nome);
         conta.setTipo(tipoSelecionado);
@@ -236,7 +237,8 @@ public class ContasJFrame extends javax.swing.JFrame {
         if (idEditar == -1) {
             cadastrarConta(conta);
         } else {
-            editarConta(nome, tipoSelecionado, saldo, descricao);
+            conta.setId(idEditar);
+            editarConta(conta);
         }
 
 //import br.com.proway.granacerta.bancodados.BancoDadosUtil;
@@ -264,30 +266,20 @@ public class ContasJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonApagarActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // Comando que será executado no nosso banco de dados
-        String sql = "SELECT nome, saldo, tipo, descricao FROM contas WHERE id = ?";
-
         int indiceLinhaSelecionada = jTableContas.getSelectedRow();
         idEditar = Integer.parseInt(modeloTabela.getValueAt(indiceLinhaSelecionada, 0).toString());
 
-        try (Connection conexao = BancoDadosUtil.getConnection()) {
-            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
-            preparadorDeSQL.setInt(1, idEditar);
-            preparadorDeSQL.execute();
-            ResultSet registros = preparadorDeSQL.getResultSet();
-            if (registros.next()) {
-                String nome = registros.getString("nome");
-                double saldo = registros.getDouble("saldo");
-                int tipo = registros.getInt("tipo");
-                String descricao = registros.getString("descricao");
-                jTextFieldNome.setText(nome);
-                jFormattedTextFieldSaldo.setText(String.valueOf(saldo).replace(".", ","));
-                jTextAreaDescricao.setText(descricao);
-                if (tipo == 0) {
-                    jRadioButtonTipoPoupanca.setSelected(true);
-                } else {
-                    jRadioButtonTipoCorrente.setSelected(true);
-                }
+        try {
+            ContaRepositoryInterface repository = new ContaRepository();
+            Conta conta = repository.obterPorId(idEditar);
+
+            jTextFieldNome.setText(conta.getNome());
+            jFormattedTextFieldSaldo.setText(String.valueOf(conta.getSaldo()).replace(".", ","));
+            jTextAreaDescricao.setText(conta.getDescricao());
+            if (conta.getTipo() == 0) {
+                jRadioButtonTipoPoupanca.setSelected(true);
+            } else {
+                jRadioButtonTipoCorrente.setSelected(true);
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Não foi possível consultar a conta");
@@ -305,20 +297,20 @@ public class ContasJFrame extends javax.swing.JFrame {
     }
 
     private void consultarContas() {
-        try (Connection conexao = BancoDadosUtil.getConnection()) {
-            String sql = "SELECT id, nome, saldo, tipo, descricao FROM contas;";
-            Statement executorSql = conexao.createStatement();
-            executorSql.execute(sql);
-            ResultSet registros = executorSql.getResultSet();
-            modeloTabela.setRowCount(0);
+        modeloTabela.setRowCount(0);
+        try {
+            ContaRepositoryInterface repositorio = new ContaRepository();
+            List<Conta> contas = repositorio.obterTodos();
 
-            while (registros.next()) {
-                int id = registros.getInt("id");
-                String nome = registros.getString("nome");
-                double saldo = registros.getDouble("saldo");
-                int tipo = registros.getInt("tipo");
-                modeloTabela.addRow(new Object[]{id, nome, tipo, saldo});
+            for (Conta conta : contas) {
+                modeloTabela.addRow(new Object[]{
+                    conta.getId(),
+                    conta.getNome(),
+                    conta.getTipo(),
+                    conta.getSaldo()
+                });
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Não foi possível consultar as contas");
@@ -329,7 +321,7 @@ public class ContasJFrame extends javax.swing.JFrame {
         try {
             ContaRepositoryInterface repositorio = new ContaRepository();
             repositorio.adicionar(conta);
-            
+
             JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso");
             limparCampos();
             consultarContas();
@@ -340,16 +332,11 @@ public class ContasJFrame extends javax.swing.JFrame {
         }
     }
 
-    private void editarConta(String nome, int tipoSelecionado, double saldo, String descricao) {
-        String sql = "UPDATE contas SET nome = ?, tipo = ?, saldo = ?, descricao = ? WHERE id = ?";
-        try (Connection conexao = BancoDadosUtil.getConnection()) {
-            PreparedStatement preparadorSQL = conexao.prepareStatement(sql);
-            preparadorSQL.setString(1, nome);
-            preparadorSQL.setInt(2, tipoSelecionado);
-            preparadorSQL.setDouble(3, saldo);
-            preparadorSQL.setString(4, descricao);
-            preparadorSQL.setInt(5, idEditar);
-            preparadorSQL.execute();
+    private void editarConta(Conta conta) {
+        try {
+            ContaRepositoryInterface repositorio = new ContaRepository();
+            repositorio.editar(conta);
+
             limparCampos();
             consultarContas();
             JOptionPane.showMessageDialog(null, "Conta alterada com sucesso");

@@ -4,7 +4,10 @@ import br.com.proway.granacerta.bancodados.BancoDadosUtil;
 import br.com.proway.granacerta.bean.Conta;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -26,13 +29,57 @@ public class ContaRepository implements ContaRepositoryInterface {
     }
 
     @Override
-    public List<Conta> obterTodos() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public List<Conta> obterTodos() throws SQLException {
+        List<Conta> contas = new ArrayList<>();
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            String sql = "SELECT id, nome, saldo, tipo, descricao FROM contas;";
+            Statement executorSql = conexao.createStatement();
+            executorSql.execute(sql);
+            ResultSet registros = executorSql.getResultSet();
+
+            while (registros.next()) {
+                int id = registros.getInt("id");
+                String nome = registros.getString("nome");
+                double saldo = registros.getDouble("saldo");
+                int tipo = registros.getInt("tipo");
+                
+                Conta conta = new Conta();
+                conta.setId(id);
+                conta.setNome(nome);
+                conta.setSaldo(saldo);
+                conta.setTipo(tipo);
+                
+                contas.add(conta);
+            }
+        }
+        return contas;
     }
 
     @Override
-    public Conta obterPorId(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Conta obterPorId(int id) throws SQLException {
+        // Comando que será executado no nosso banco de dados
+        String sql = "SELECT nome, saldo, tipo, descricao FROM contas WHERE id = ?";
+        try (Connection conexao = BancoDadosUtil.getConnection()) {
+            PreparedStatement preparadorDeSQL = conexao.prepareStatement(sql);
+            preparadorDeSQL.setInt(1, id);
+            preparadorDeSQL.execute();
+            ResultSet registros = preparadorDeSQL.getResultSet();
+            if (registros.next()) {
+                String nome = registros.getString("nome");
+                double saldo = registros.getDouble("saldo");
+                int tipo = registros.getInt("tipo");
+                String descricao = registros.getString("descricao");
+                
+                Conta conta = new Conta();
+                conta.setNome(nome);
+                conta.setSaldo(saldo);
+                conta.setTipo(tipo);
+                conta.setDescricao(descricao);
+                conta.setId(id);
+                return conta;
+            }
+        }
+        return null;
     }
 
     @Override
