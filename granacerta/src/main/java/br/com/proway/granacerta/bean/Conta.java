@@ -16,7 +16,6 @@ public class Conta {
         this.descricao = descricao;
     }
 
-
     public int getId() {
         return id;
     }
@@ -49,4 +48,8 @@ public class Conta {
         this.saldo = saldo;
     }
 
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

@@ -1,5 +1,14 @@
 Contas Pagar Lista
 Contas Pagar Cadastro
+    nome *
+    Tipo (entrada/saída) *
+    id conta *
+    id cliente *
+    valor *
+    data prevista *
+    data realizada
+    status *
+    registro_ativo *
 
 ContasPagarReceberJframe
 Filtros:

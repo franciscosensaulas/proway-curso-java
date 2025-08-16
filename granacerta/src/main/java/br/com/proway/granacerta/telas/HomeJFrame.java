@@ -27,6 +27,7 @@ public class HomeJFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jButtonContas = new javax.swing.JButton();
+        jButtonContas1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Grana Certa | Home");
@@ -39,6 +40,14 @@ public class HomeJFrame extends javax.swing.JFrame {
             }
         });
 
+        jButtonContas1.setText("Contas Pagar/Receber");
+        jButtonContas1.setPreferredSize(new java.awt.Dimension(75, 75));
+        jButtonContas1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonContas1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -46,13 +55,17 @@ public class HomeJFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButtonContas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(294, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonContas1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonContas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonContas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonContas1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(194, Short.MAX_VALUE))
         );
 
@@ -66,7 +79,14 @@ public class HomeJFrame extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButtonContasActionPerformed
 
+    private void jButtonContas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonContas1ActionPerformed
+        var form = new ContaPagarJFrame();
+        form.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jButtonContas1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonContas;
+    private javax.swing.JButton jButtonContas1;
     // End of variables declaration//GEN-END:variables
 }
