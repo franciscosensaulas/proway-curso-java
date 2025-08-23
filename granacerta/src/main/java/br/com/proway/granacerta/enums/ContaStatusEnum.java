@@ -1,24 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
- */
 package br.com.proway.granacerta.enums;
 
-import static br.com.proway.granacerta.enums.ContaTipoEnum.values;
-
-/**
- *
- * @author francisco.sens
- */
 public enum ContaStatusEnum {
-    PENDENTE(0),
-    REALIZADO(1),
-    CANCELADO(2);
+    PENDENTE(0, "Pendente"),
+    REALIZADO(1, "Realizado"),
+    CANCELADO(2, "Cancelado");
 
     private final int code;
+    private final String titulo;
 
-    private ContaStatusEnum(int code) {
+    private ContaStatusEnum(int code, String titulo) {
         this.code = code;
+        this.titulo = titulo;
     }
 
     public static ContaStatusEnum fromCode(int code) {
@@ -32,5 +24,9 @@ public enum ContaStatusEnum {
 
     public int getCode() {
         return code;
+    }
+
+    public String getTitulo() {
+        return titulo;
     }
 }
