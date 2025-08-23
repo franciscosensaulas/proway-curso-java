@@ -6,11 +6,17 @@ package br.com.proway.granacerta.telas;
 
 import br.com.proway.granacerta.bean.Cliente;
 import br.com.proway.granacerta.bean.Conta;
+import br.com.proway.granacerta.bean.ContaPagarReceber;
+import br.com.proway.granacerta.enums.ContaStatusEnum;
+import br.com.proway.granacerta.enums.ContaTipoEnum;
 import br.com.proway.granacerta.repositories.ClienteRepository;
 import br.com.proway.granacerta.repositories.ClienteRepositoryInterface;
+import br.com.proway.granacerta.repositories.ContaPagarReceberRepository;
 import br.com.proway.granacerta.repositories.ContaRepository;
 import br.com.proway.granacerta.repositories.ContaRepositoryInterface;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
@@ -68,6 +74,11 @@ public class ContaPagarCadastroJFrame extends javax.swing.JFrame {
         jLabelDataPrevista.setText("Data Prevista");
 
         jButtonSalvar.setText("Salvar");
+        jButtonSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSalvarActionPerformed(evt);
+            }
+        });
 
         jButtonCancelar.setText("Cancelar");
 
@@ -140,6 +151,62 @@ public class ContaPagarCadastroJFrame extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
+        if (jComboBoxConta.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione uma conta");
+            return;
+        }
+        if (jComboBoxCliente.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione uma conta");
+            return;
+        }
+        String nome = jTextFieldNome.getText().trim();
+        double valor = Double.parseDouble(jTextFieldValor.getText());
+        String data = jFormattedTextFieldDataPrevista.getText();
+        Cliente cliente = (Cliente) jComboBoxCliente.getSelectedItem();
+        Conta conta = (Conta) jComboBoxConta.getSelectedItem();
+
+        ContaPagarReceber contaPagarReceber = new ContaPagarReceber();
+        contaPagarReceber.setNome(nome);
+        contaPagarReceber.setValor(valor);
+        contaPagarReceber.setCliente(cliente);
+        contaPagarReceber.setConta(conta);
+        //contaPagarReceber.setDataPrevista(data);
+        contaPagarReceber.setTipo(ContaTipoEnum.ENTRADA);
+        contaPagarReceber.setDataPrevista(LocalDate.of(2025, Month.MARCH, 10));
+        contaPagarReceber.setStatus(ContaStatusEnum.PENDENTE);
+
+        try {
+            var repository = new ContaPagarReceberRepository();
+            repository.adicionar(contaPagarReceber);
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Conta Receber cadastrada com sucesso",
+                    "Aviso",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Não foi possível cadastrar a conta Pagar Receber, pois ocorreu "
+                    + "um erro na persistência",
+                    "Aviso",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Não foi possível cadastrar a conta Pagar Receber, erro desconhecido, "
+                    + "entre em contato com suporte",
+                    "Aviso",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     /**
      * @param args the command line arguments
