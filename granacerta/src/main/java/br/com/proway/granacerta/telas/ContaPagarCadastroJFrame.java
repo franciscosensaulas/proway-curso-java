@@ -67,7 +67,7 @@ public class ContaPagarCadastroJFrame extends javax.swing.JFrame {
         jButtonSalvar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabelNome.setText("Nome");
 
@@ -168,7 +168,8 @@ public class ContaPagarCadastroJFrame extends javax.swing.JFrame {
             return;
         }
         String nome = jTextFieldNome.getText().trim();
-        double valor = Double.parseDouble(jTextFieldValor.getText());
+        double valor = Double.parseDouble(jTextFieldValor.getText()
+                .replace(".", "").replace(",", "."));
         String data = jFormattedTextFieldDataPrevista.getText();
         Cliente cliente = (Cliente) jComboBoxCliente.getSelectedItem();
         Conta conta = (Conta) jComboBoxConta.getSelectedItem();
@@ -192,17 +193,21 @@ public class ContaPagarCadastroJFrame extends javax.swing.JFrame {
         try {
             var repository = new ContaPagarReceberRepository();
             repository.adicionar(contaPagarReceber);
+            
             JOptionPane.showMessageDialog(
                     this,
-                    "Conta Receber cadastrada com sucesso",
+                    "Conta " + contaTipo.getTitulo() + " cadastrada com sucesso",
                     "Aviso",
                     JOptionPane.INFORMATION_MESSAGE
             );
+            var lista = new ContaPagarJFrame();
+            lista.setVisible(true);
+            dispose();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(
                     this,
-                    "Não foi possível cadastrar a conta Pagar Receber, pois ocorreu "
+                    "Não foi possível cadastrar a conta " + contaTipo.getTitulo() + ", pois ocorreu "
                     + "um erro na persistência",
                     "Aviso",
                     JOptionPane.ERROR_MESSAGE
@@ -211,7 +216,7 @@ public class ContaPagarCadastroJFrame extends javax.swing.JFrame {
             e.printStackTrace();
             JOptionPane.showMessageDialog(
                     this,
-                    "Não foi possível cadastrar a conta Pagar Receber, erro desconhecido, "
+                    "Não foi possível cadastrar a conta " + contaTipo.getTitulo() + ", erro desconhecido, "
                     + "entre em contato com suporte",
                     "Aviso",
                     JOptionPane.ERROR_MESSAGE

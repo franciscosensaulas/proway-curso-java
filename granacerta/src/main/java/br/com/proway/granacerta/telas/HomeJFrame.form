@@ -29,7 +29,7 @@
               <Component id="jButtonContas" min="-2" pref="100" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jButtonContas1" min="-2" pref="173" max="-2" attributes="0"/>
-              <EmptySpace pref="109" max="32767" attributes="0"/>
+              <EmptySpace pref="33" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

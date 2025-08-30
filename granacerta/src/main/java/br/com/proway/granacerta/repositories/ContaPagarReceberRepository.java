@@ -10,6 +10,7 @@ import br.com.proway.granacerta.bean.Conta;
 import br.com.proway.granacerta.bean.ContaPagarReceber;
 import br.com.proway.granacerta.enums.ContaStatusEnum;
 import br.com.proway.granacerta.enums.ContaTipoEnum;
+import br.com.proway.granacerta.modelos.ContaPagarReceberFiltro;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -49,7 +50,7 @@ public class ContaPagarReceberRepository implements ContaPagarReceberRepositoryI
     }
 
     @Override
-    public List<ContaPagarReceber> obterTodos() throws SQLException {
+    public List<ContaPagarReceber> obterTodos(ContaPagarReceberFiltro filtro) throws SQLException {
         var contasPagarReceber = new ArrayList<ContaPagarReceber>();
         try (var conexao = BancoDadosUtil.getConnection()) {
             String sql = """
