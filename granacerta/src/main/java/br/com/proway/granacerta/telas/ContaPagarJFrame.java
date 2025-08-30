@@ -7,6 +7,7 @@ package br.com.proway.granacerta.telas;
 import br.com.proway.granacerta.bean.Cliente;
 import br.com.proway.granacerta.bean.Conta;
 import br.com.proway.granacerta.enums.ContaStatusEnum;
+import br.com.proway.granacerta.enums.ContaTipoEnum;
 import br.com.proway.granacerta.modelos.ContaPagarReceberFiltro;
 import br.com.proway.granacerta.repositories.ClienteRepository;
 import br.com.proway.granacerta.repositories.ClienteRepositoryInterface;
@@ -379,7 +380,7 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        xFiltros();
+
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     /**
@@ -445,7 +446,7 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
         // Remover os registros do jTable, ou seja, limpar a tabela visual
         modeloTabela.setRowCount(0);
         try {
-            var contasPagarReceber = repositorio.obterTodos();
+            var contasPagarReceber = repositorio.obterTodos(filtros);
             // foreach
             for (var contaPagarReceber : contasPagarReceber) {
                 modeloTabela.addRow(new Object[]{
@@ -465,13 +466,26 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
         }
     }
 
-    private void xFiltros() {
+    private void preencherFiltros() {
         var pesquisaNome = jTextFieldNome.getText();
-        var ordemColuna = jComboBoxColuna.getSelectedItem();
-        var ordemOrdem = jComboBoxOrdem.getSelectedItem();
+        var ordemColuna = jComboBoxColuna.getSelectedItem().toString();
+        var ordemOrdem = jComboBoxOrdem.getSelectedItem().toString();
         var quantidade = Integer.parseInt(
                 jComboBoxQuantidadeRegistros.getSelectedItem().toString());
         var tipo = jComboBoxTipo.getSelectedItem().toString();
+
+        filtros.setPesquisaNome(pesquisaNome);
+        filtros.setOrdenacaoColuna(ordemColuna);
+        filtros.setOrdenacaoOrdem(ordemOrdem);
+        filtros.setQuantidadeRegistros(quantidade);
+
+        if (tipo.equals("Ambas")) {
+            filtros.setTipo(null);
+        } else if (tipo.equals("Entradas")) {
+            filtros.setTipo(ContaTipoEnum.ENTRADA);
+        } else {
+            filtros.setTipo(ContaTipoEnum.SAIDA);
+        }
 
         if (jRadioButtonStatusCancelado.isSelected()) {
             filtros.setStatus(ContaStatusEnum.CANCELADO);
@@ -482,19 +496,19 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
         } else {
             filtros.setStatus(null);
         }
-        
-        if(jComboBoxCliente.getSelectedIndex() > -1){
-            filtros.setCliente((Cliente)jComboBoxCliente.getSelectedItem());
-        }else{
+
+        if (jComboBoxCliente.getSelectedIndex() > -1) {
+            filtros.setCliente((Cliente) jComboBoxCliente.getSelectedItem());
+        } else {
             filtros.setCliente(null);
         }
-        
-        if(jComboBoxConta.getSelectedIndex() > -1){
-            filtros.setConta((Conta)jComboBoxConta.getSelectedItem());
-        }else{
+
+        if (jComboBoxConta.getSelectedIndex() > -1) {
+            filtros.setConta((Conta) jComboBoxConta.getSelectedItem());
+        } else {
             filtros.setConta(null);
         }
-        
+
         System.out.println(filtros);
     }
 
