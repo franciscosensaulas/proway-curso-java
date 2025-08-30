@@ -70,36 +70,38 @@ CREATE TABLE contas_receber_pagar(
     FOREIGN KEY(id_conta) REFERENCES contas(id)
 );
 
+-- Inserindo 20 contas a pagar/receber com nomes ajustados e status diversificados
+-- Inserindo 20 contas a pagar/receber com nomes ajustados e status diversificados
 
--- Inserindo uma conta a receber (tipo = 0)
 INSERT INTO contas_receber_pagar (
-    id_cliente, id_conta, nome, tipo, valor, data_prevista, status
-) VALUES (
-    1, -- Empresa Alpha
-    1, -- Viacredi
-    'Recebimento de serviços prestados',
-    0, -- Conta a receber
-    1500.00,
-    '2025-08-25',
-    0 -- Status pendente (por exemplo)
-);
+    id_cliente, id_conta, nome, tipo, valor, data_prevista, status, data_realizada
+) VALUES
+(2, 4, 'Comissão de vendas', 0, 2000.0, '2025-09-28', 0, NULL),
+(1, 4, 'Telefone fixo', 1, 80.0, '2025-09-05', 1, '2025-09-05'),
+(2, 1, 'Venda de bicicleta', 0, 250.0, '2025-09-12', 1, '2025-09-12'),
+(2, 2, 'Água', 1, 150.0, '2025-09-03', 1, '2025-09-03'),
+(2, 5, 'Aluguel', 1, 1200.0, '2025-09-10', 0, NULL),
+(1, 5, 'Escola das crianças', 1, 500.0, '2025-09-25', 1, '2025-09-25'),
+(2, 2, 'Plano de saúde', 1, 350.0, '2025-09-08', 2, '2025-09-08'),
+(1, 3, 'Financiamento de imóvel', 1, 1200.0, '2025-09-10', 1, '2025-09-10'),
+(3, 4, 'Prestação do carro', 1, 800.0, '2025-09-22', 2, '2025-09-22'),
+(2, 2, 'Aluguel de imóvel', 0, 1500.0, '2025-09-05', 0, NULL),
+(3, 1, 'Supermercado', 1, 450.0, '2025-09-08', 0, NULL),
+(1, 5, 'Venda de móveis usados', 0, 850.0, '2025-09-30', 1, '2025-09-30'),
+(2, 3, 'TV a cabo', 1, 200.0, '2025-09-18', 0, NULL),
+(2, 5, 'Venda de móveis usados', 0, 1800.0, '2025-09-12', 2, '2025-09-12'),
+(3, 3, 'Salário de freelancer', 0, 3500.0, '2025-09-10', 1, '2025-09-10'),
+(1, 2, 'Consultoria pessoal', 0, 3000.0, '2025-09-20', 0, NULL),
+(3, 3, 'Curso online', 0, 1000.0, '2025-09-25', 1, '2025-09-25'),
+(1, 2, 'Gás de cozinha', 1, 100.0, '2025-09-15', 1, '2025-09-15'),
+(3, 3, 'Internet', 1, 120.0, '2025-09-07', 2, '2025-09-07'),
+(1, 1, 'Energia elétrica', 1, 350.0, '2025-08-18', 0, NULL),
+(1, 4, 'Venda de celular usado', 0, 1200.0, '2025-08-30', 0, NULL),
+(3, 1, 'Condomínio', 1, 600.0, '2025-09-03', 0, NULL),
+(1, 1, 'Venda de Xbox', 0, 2000.0, '2025-08-15', 1, '2025-08-15');
 
--- Inserindo uma conta a pagar (tipo = 1)
-INSERT INTO contas_receber_pagar (
-    id_cliente, id_conta, nome, tipo, valor, data_prevista, status
-) VALUES (
-    2, -- Beta Soluções LTDA
-    3, -- Caixa Econômica
-    'Pagamento de fornecedor de TI',
-    1, -- Conta a pagar
-    850.00,
-    '2025-08-20',
-    0 -- Status pendente (por exemplo)
-);
 
-
-
-
+-- Consultar todas as transações inseridas
 SELECT 
     crp.id,
     c.nome AS cliente_nome,
@@ -118,6 +120,9 @@ JOIN
     clientes c ON crp.id_cliente = c.id
 JOIN 
     contas ct ON crp.id_conta = ct.id;
+
+
+
 /*
 Tipos de dados:
 	- INT para campos de número inteiro na casa dos 2 bilhões
