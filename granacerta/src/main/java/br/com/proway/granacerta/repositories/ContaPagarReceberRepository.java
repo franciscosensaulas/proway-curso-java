@@ -50,10 +50,10 @@ public class ContaPagarReceberRepository implements ContaPagarReceberRepositoryI
     }
 
     @Override
-    public List<ContaPagarReceber> obterTodos(ContaPagarReceberFiltro filtro) throws SQLException {
+    public List<ContaPagarReceber> obterTodos(ContaPagarReceberFiltro filtros) throws SQLException {
         var contasPagarReceber = new ArrayList<ContaPagarReceber>();
         try (var conexao = BancoDadosUtil.getConnection()) {
-            String sql = """
+            var sql = new StringBuilder("""
                          SELECT 
                              crp.id,
                              c.id AS cliente_id,
@@ -73,9 +73,58 @@ public class ContaPagarReceberRepository implements ContaPagarReceberRepositoryI
                          JOIN 
                              clientes c ON crp.id_cliente = c.id
                          JOIN 
-                             contas ct ON crp.id_conta = ct.id;
-                         """;
-            var preparadorSql = conexao.prepareStatement(sql);
+                             contas ct ON crp.id_conta = ct.id
+                         WHERE 1=1""");
+
+            if (filtros.getTipo() != null) {
+                sql.append(" AND crp.tipo = ?");
+            }
+
+            if (filtros.getCliente() != null) {
+                sql.append(" AND crp.id_cliente = ?");
+            }
+
+            if (filtros.getConta() != null) {
+                sql.append(" AND crp.id_conta = ?");
+            }
+            if (filtros.getStatus() != null) {
+                sql.append(" AND crp.status = ?");
+            }
+            if (filtros.getPesquisaNome() != null) {
+                sql.append(" AND crp.nome LIKE ?");
+            }
+            
+            String colunaOrdenacao = obterColunaOrdenacao(filtros.getOrdenacaoColuna());
+            String ordem = filtros.getOrdenacaoOrdem().equals("Crescente") ? "ASC" : "DESC";
+            sql.append(" ORDER BY ").append(colunaOrdenacao).append(" ").append(ordem);
+
+            if (filtros.getQuantidadeRegistros() > 0) {
+                sql.append(" LIMIT ?");
+            }
+
+            var preparadorSql = conexao.prepareStatement(sql.toString());
+            var index = 1;
+
+            if (filtros.getTipo() != null) {
+                preparadorSql.setInt(index++, filtros.getTipo().getCode());
+            }
+            if (filtros.getCliente() != null) {
+                preparadorSql.setInt(index++, filtros.getCliente().getId());
+            }
+
+            if (filtros.getConta() != null) {
+                preparadorSql.setInt(index++, filtros.getConta().getId());
+            }
+            if (filtros.getStatus() != null) {
+                preparadorSql.setInt(index++, filtros.getStatus().getCode());
+            }
+            if (filtros.getPesquisaNome() != null) {
+                preparadorSql.setString(index++, "%" + filtros.getPesquisaNome() + "%");
+            }
+
+            if (filtros.getQuantidadeRegistros() > 0) {
+                preparadorSql.setInt(index++, filtros.getQuantidadeRegistros());
+            }
 
             var registros = preparadorSql.executeQuery();
             while (registros.next()) {
@@ -98,12 +147,12 @@ public class ContaPagarReceberRepository implements ContaPagarReceberRepositoryI
                 cliente.setId(registros.getInt("cliente_id"));
                 cliente.setNome(registros.getString("cliente_nome"));
                 contaPagarReceber.setCliente(cliente);
-                
+
                 var conta = new Conta();
                 conta.setId(registros.getInt("conta_id"));
                 conta.setNome(registros.getString("conta_nome"));
                 contaPagarReceber.setConta(conta);
-                
+
                 contasPagarReceber.add(contaPagarReceber);
             }
         }
@@ -123,6 +172,18 @@ public class ContaPagarReceberRepository implements ContaPagarReceberRepositoryI
     @Override
     public void apagar(int id) throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    private String obterColunaOrdenacao(String coluna){
+        switch(coluna){
+            case "Cliente": return "c.nome";
+            case "Conta": return "ct.nome";
+            case "Nome": return "crp.nome";
+            case "Valor": return "crp.valor";
+            case "Tipo": return "crp.tipo";
+            case "Status": return "crp.status";
+            default: return "cpr.id";
+        }
     }
 
 }

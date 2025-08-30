@@ -102,23 +102,55 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
 
         jLabelConta.setText("Conta");
 
+        jComboBoxConta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxContaActionPerformed(evt);
+            }
+        });
+
         jLabelCliente.setText("Cliente");
+
+        jComboBoxCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxClienteActionPerformed(evt);
+            }
+        });
 
         jLabelTipo.setText("Tipo");
 
         jComboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ambas", "Entradas", "Saídas" }));
+        jComboBoxTipo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTipoActionPerformed(evt);
+            }
+        });
 
         jLabelStatus.setText("Status");
 
         buttonGroup1.add(jRadioButtonStatusCancelado);
         jRadioButtonStatusCancelado.setText("Cancelado");
+        jRadioButtonStatusCancelado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonStatusCanceladoActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(jRadioButtonStatusPendente);
         jRadioButtonStatusPendente.setText("Pendente");
+        jRadioButtonStatusPendente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonStatusPendenteActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(jRadioButtonStatusAmbos);
         jRadioButtonStatusAmbos.setSelected(true);
         jRadioButtonStatusAmbos.setText("Ambos");
+        jRadioButtonStatusAmbos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonStatusAmbosActionPerformed(evt);
+            }
+        });
 
         jLabelNome.setText("Nome");
 
@@ -132,6 +164,11 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
 
         jButtonPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/lupa.png"))); // NOI18N
         jButtonPesquisar.setText("Pesquisar");
+        jButtonPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPesquisarActionPerformed(evt);
+            }
+        });
 
         jSeparatorOrdenacao.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -140,14 +177,29 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
         jLabelColuna.setText("Coluna");
 
         jComboBoxColuna.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cliente", "Conta", "Nome", "Valor", "Tipo", "Status", " " }));
+        jComboBoxColuna.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxColunaActionPerformed(evt);
+            }
+        });
 
         jLabelOrdem.setText("Órdem");
 
         jComboBoxOrdem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Crescente", "Decrescente" }));
+        jComboBoxOrdem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxOrdemActionPerformed(evt);
+            }
+        });
 
         jLabelQuantidadeRegistros.setText("Quantidade de Registros");
 
         jComboBoxQuantidadeRegistros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "25", "50", "100" }));
+        jComboBoxQuantidadeRegistros.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxQuantidadeRegistrosActionPerformed(evt);
+            }
+        });
 
         jButtonApagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/botao-apagar.png"))); // NOI18N
         jButtonApagar.setText("Apagar");
@@ -209,6 +261,11 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
 
         buttonGroup1.add(jRadioButtonStatusRecebido);
         jRadioButtonStatusRecebido.setText("Recebido");
+        jRadioButtonStatusRecebido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButtonStatusRecebidoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -370,7 +427,20 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLimparActionPerformed
-        // TODO add your handling code here:
+        jTextFieldNome.setText("");
+
+        jComboBoxColuna.setSelectedIndex(0); // Seleciona a opção "Cliente"
+        jComboBoxOrdem.setSelectedIndex(0); // Seleciona a opção "Crescente"
+        jComboBoxQuantidadeRegistros.setSelectedIndex(0); // Seleciona a opçao "10"
+
+        jComboBoxTipo.setSelectedIndex(0); // Seleciona a opção "Ambas"
+
+        jComboBoxConta.setSelectedIndex(-1);
+        jComboBoxCliente.setSelectedIndex(-1);
+
+        jRadioButtonStatusAmbos.setSelected(true);
+
+        preencherContasPagarReceber();
     }//GEN-LAST:event_jButtonLimparActionPerformed
 
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
@@ -382,6 +452,50 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
 
     }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    private void jButtonPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPesquisarActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jButtonPesquisarActionPerformed
+
+    private void jComboBoxContaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxContaActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jComboBoxContaActionPerformed
+
+    private void jComboBoxClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxClienteActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jComboBoxClienteActionPerformed
+
+    private void jComboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTipoActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jComboBoxTipoActionPerformed
+
+    private void jComboBoxColunaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxColunaActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jComboBoxColunaActionPerformed
+
+    private void jComboBoxOrdemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxOrdemActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jComboBoxOrdemActionPerformed
+
+    private void jComboBoxQuantidadeRegistrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxQuantidadeRegistrosActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jComboBoxQuantidadeRegistrosActionPerformed
+
+    private void jRadioButtonStatusAmbosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonStatusAmbosActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jRadioButtonStatusAmbosActionPerformed
+
+    private void jRadioButtonStatusRecebidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonStatusRecebidoActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jRadioButtonStatusRecebidoActionPerformed
+
+    private void jRadioButtonStatusPendenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonStatusPendenteActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jRadioButtonStatusPendenteActionPerformed
+
+    private void jRadioButtonStatusCanceladoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonStatusCanceladoActionPerformed
+        preencherContasPagarReceber();
+    }//GEN-LAST:event_jRadioButtonStatusCanceladoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -446,6 +560,7 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
         // Remover os registros do jTable, ou seja, limpar a tabela visual
         modeloTabela.setRowCount(0);
         try {
+            preencherFiltros();
             var contasPagarReceber = repositorio.obterTodos(filtros);
             // foreach
             for (var contaPagarReceber : contasPagarReceber) {
