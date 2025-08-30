@@ -203,6 +203,11 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
 
         jButtonApagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/botao-apagar.png"))); // NOI18N
         jButtonApagar.setText("Apagar");
+        jButtonApagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonApagarActionPerformed(evt);
+            }
+        });
 
         jButtonEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/editar.png"))); // NOI18N
         jButtonEditar.setText("Editar");
@@ -496,6 +501,11 @@ public class ContaPagarJFrame extends javax.swing.JFrame {
     private void jRadioButtonStatusCanceladoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButtonStatusCanceladoActionPerformed
         preencherContasPagarReceber();
     }//GEN-LAST:event_jRadioButtonStatusCanceladoActionPerformed
+
+    private void jButtonApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonApagarActionPerformed
+        // SELECT * FROM contas_pagar_receber WHERE ativo = 1;
+        // UPDATE contas_pagar_receber SET ativo = 0 WHERE id = ?;
+    }//GEN-LAST:event_jButtonApagarActionPerformed
 
     /**
      * @param args the command line arguments
